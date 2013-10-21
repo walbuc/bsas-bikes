@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+        </title>
+        <link rel="stylesheet" href="jquery.mobile-1.1.0.min.css" />
+        <link rel="stylesheet" href="my.css" />
+        <link rel="stylesheet" href="styles.css" />
+		<style>
+		  .ui-li em {
+		    font-weight: normal;
+		    opacity: 0.5;
+		    font-size: 13px;
+		  }
+  
+		</style>
+		<script src="jquery.min.js"></script>
+        <script src="jquery.mobile-1.1.0.min.js"></script>
+		<script src="cordova-1.8.0.js" type="text/javascript"></script>
+    	<script src="normalizadorDirecciones.min.js" type="text/javascript"></script>
+    	<script src="usig.GeoCoder.min.js" type="text/javascript"></script>
+	    <script src="usig.AutoCompleterFull.min.js" type="text/javascript"></script>
+    	<script src="usig.Recorridos.min.js" type="text/javascript"></script>
+		<script src="usig.Punto.min.js" type="text/javascript"></script>
+		<script src="usig.Direccion.min.js" type="text/javascript"></script>         	
+    	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDTg395ZfVVDVK6pxP88sdlfiE1zebgQRc&sensor=false" type="text/javascript"></script>
+ 		<script src="jquery.validate.min.js" type="text/javascript"></script>
+ 		<script src="jquery.align.js" type="text/javascript"></script>   	
+    </head>
+    <body style="min-height:100%; background-color:#000000">
+       <div data-role="page" id="home">
+			<div data-role="header" id="header-home"> 
+				<h5 class="baimagen" id="homeheader"></h5> 
+			</div>        		
+            <div data-role="content" id="home-content">
+		        <a data-role="button" data-transition="none" id="ciclovia-cercana" class="green-btn" style="border:none; margin-top:-80px;">
+		           <span>Ciclovia <br/> cercana</span>
+		           <img id="largeImage" src=""/>
+		        </a>             
+                <div id="homegrid" class="ui-grid-a">
+                    <div class="ui-block-a">
+	                    <a data-role="button" data-transition="none" href="#pageestaciones">
+	                       <img src="estacion.png" />
+	                       <p>Estaciones</p>
+	                    </a>                      
+                    </div>
+                    <div class="ui-block-b">
+                      <a data-role="button" data-transition="none" id="ver-ciclovias" href="#page-mapa">
+                         <img src="bicisenda.png" />
+                         Mapa de Ciclovías
+                      </a>                    
+                    </div>
+                    <div class="ui-block-a block-c">
+                     <a data-role="button" data-transition="none" href="#informacion">
+                        <img src="icon.png" />
+                        Informacion
+                     </a>
+                    </div>
+                    <div class="ui-block-b block-d">
+                     <a style="height:100%" data-role="button" data-transition="none" href="#multa">
+                        <img src="photo.png" />
+                        Denuncia Vial
+                     </a>
+                    </div>
+                </div>
+                
+            </div>
+			<div data-role="footer" id="footer-home"> 
+				<h5 id="cercana">Esperando ubicación...</h5> 
+			</div>             
+        </div>
+       <div data-role="page" id="pageestaciones">
+			<div data-role="header"> 
+				<a href="#home" data-icon="arrow-l" style="margin-top:3px !important;" data-theme="e">Volver</a>
+				<h5 class="baimagen">Estaciones</h5> 
+			</div>        
+       		<ul data-role="listview" data-theme="g" id="estaciones">
+       		</ul>	   
+	   </div>        
+       <div data-role="page" id="page-mapa" style="width:100%; height:100%;">
+       		<div data-role="header">
+				<a href="#home" data-icon="arrow-l" style="margin-top:3px !important;" data-theme="e">Volver</a>
+      		</div>
+       		<div data-role="content" style="width:100%; height:100%; padding:0;"> 
+       			<div id="mapa" style="height:400px;width:240px;"></div>
+       		</div>
+       </div>
+       <div data-role="page" id="multa" style="min-height:100%; background-color:#000000">
+        	<div data-role="header">
+				<a href="#home" data-icon="arrow-l" style="margin-top:3px !important;" data-theme="e">Volver</a>
+      		</div>      		
+       		<div data-role="content" style="min-height:100%; background-color:#000000"> 
+       			<img style="display:none;" id="foto" src=""/>
+       		</div> 
+			<div data-role="footer"> 
+				<fieldset class="ui-grid-a">
+					<div class="ui-block-a"><a data-role="button" data-transition="none" href="#home" style="display:block; margin:0.3em auto;">Cancelar</a></div>
+					<div class="ui-block-b"><a data-role="button" type="submit" id="enviar" style="display:block; margin:0.3em auto;">Enviar</a></div>	   
+				</fieldset>
+			</div>         		      
+       </div>
+       <div data-role="page" id="recorridos" style="min-height:100%; background-color:#000000">
+       		<div data-role="header">
+				<a href="#home" data-icon="arrow-l" style="margin-top:3px !important;" data-theme="e">Volver</a>
+       			<h5 class="baimagen">Recorrido</h5>
+       		</div>
+           	<ul data-role="listview" data-theme="g" id="recorrido">
+
+			</ul>
+  
+       </div>
+       <div data-role="page" id="informacion">
+			<div data-role="header">
+				<a href="#home" data-icon="arrow-l" style="margin-top:3px !important;" data-theme="e">Volver</a>
+				<h5 class="baimagen">Información</h5> 
+			</div>
+			<ul data-role="listview" data-theme="g" id="infolist">
+				<li class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c"><a href="#" style="white-space:normal; font-size: small">Mapa bicicleterias</a></li>
+			</ul>
+       </div>
+       <div data-role="page" id="formulario">
+		<div data-role="header">
+			<a href="#home" data-icon="arrow-l" style="margin-top:3px !important;" data-theme="e">Volver</a>
+			<h5 class="baimagen">Registro</h5> 
+		</div> 
+		<div data-role="content" style="text-align:center;">
+		      	<form id="formulario-tag" action="#" method="post">
+					<div data-role="fieldcontain" class="ui-hide-label form-style">
+						<label for="username">Nombre:</label>
+						<input type="text" name="nombre" id="nombre" value="" placeholder="Nombre" class="required"/>
+					</div> 
+					<div data-role="fieldcontain" class="ui-hide-label form-style">
+						<label for="apellido">Apellido:</label>
+						<input type="text" name="apellido" id="apellido" value="" placeholder="Apellido" class="required"/>
+					</div> 	
+					<div data-role="fieldcontain" class="ui-hide-label form-style">
+						<label for="dni">DNI:</label>
+						<input type="text" name="dni" id="dni" value="" placeholder="DNI" class="required"/>
+					</div> 	
+					<div data-role="fieldcontain" class="ui-hide-label form-style">
+						<label for="email">Email:</label>
+						<input type="text" name="email" id="email" value="" placeholder="Email" class="required"/>
+					</div> 	
+					<div data-role="fieldcontain" class="ui-hide-label form-style">
+						<label for="domicilio">Domicilio:</label>
+						<input type="text" name="domicilio" id="domicilio" value="" placeholder="Domicilio" class="required"/>
+					</div> 	
+					<a data-inline="true" type="submit" id="volver-home" data-role="button" href="#home">Cancelar</a>
+					<button data-inline="true" type="submit" id="registrar" data-theme="b" data-role="button">Registrarme</button>																			      
+				</form>	
+		</div>
+       </div>
+        
+        <script>  
+        	var LOW = 5;
+        	var MEDIUM = 10;
+        	var SERVER = 'http://servicebicis.buenosaires.gob.ar/';
+        	
+	        var pictureSource;   // picture source
+	        var destinationType; // sets the format of returned value  
+          	var currentLat;
+          	var currentLong;
+          	var currentLocation;
+          	var currentDest;
+          	var estaciones;
+          	var mapa = 0;
+          	var ref = this;          	
+			var imgData = "";
+			var uuid; 
+			var overlays = new Array();
+			var windowLocationInfo = null;
+			var markerLocation = null;
+			
+			$('#mapa').width($(document).width());
+			$('#mapa').height($(document).height());			
+			$('#recorridos').live('pageshow', function(){
+				$('#recorrido').listview();	
+			});	
+			$('#ciclovia-cercana').bind('tap',function(e){
+				e.stopPropagation();
+				getCiclovia();
+			});
+			$('#ver-ciclovias').bind('tap',function(e){
+        		if(!mapa) initMap();	
+        		clearOverlays();
+       		    var ciclovias = new google.maps.KmlLayer('https://maps.google.com/maps/ms?authuser=0&vps=3&ie=UTF8&msa=0&output=kml&msid=208349651130607057152.0004b376a38f5922f085d',{preserveViewport:true});
+  				overlays.push(ciclovias);
+       		    ciclovias.setMap(mapa);
+			});
+			$('#page-mapa').live('pageshow', function(){
+  				google.maps.event.trigger(mapa, "resize");	
+  				mapa.setCenter(new google.maps.LatLng( currentLat, currentLong ) );
+				mapa.setZoom(15);
+				windowLocationInfo.open(mapa,markerLocation);
+			});
+        	$('#multa').live('pageshow', function(){
+				if(window.localStorage.getItem('key')){
+				  navigator.camera.getPicture(onTakePicture, onFailPicture, { quality: 90,  
+				  	  														  targetWidth: 1024, 
+				  	  														  targetHeight:768, 
+				  	  														  destinationType: destinationType.DATA_URL, 
+				  	  														  correctOrientation: true 
+				  	  														 });
+				 }else{
+				  $.mobile.changePage('#formulario',{transition:'none'});
+				 }
+	      	});
+	      	$('#enviar').live('tap', function(){	            
+	            var nombre = window.localStorage.getItem('nombre');
+	            var apellido = window.localStorage.getItem('apellido');
+	            var dni = window.localStorage.getItem('dni');
+	            var email = window.localStorage.getItem('email');
+	            var domicilio = window.localStorage.getItem('domicilio');
+	            var key = window.localStorage.getItem('key');
+	            block();
+	            $.mobile.showPageLoadingMsg();
+	      		$.ajax({
+	                type: 'POST',
+	                url: SERVER + 'api/v1/denuncias/?username='+uuid+'&api_key=' + key,
+	                contentType: 'application/json; charset=utf-8',
+	                dataType: 'json',
+	                data: '{"longitud":"'+currentLong+'","latitud":"'+currentLat+'","nombre":"'+nombre+'", "apellido":"'+apellido+'", "direccion":"'+domicilio+'", "dni":"'+dni+'", "image":{"file": "'+imgData+'"}}',
+	                success: function(json) {
+	                	unblock();
+	                	$.mobile.hidePageLoadingMsg();
+	    	            $.mobile.changePage('#home', {transition:'none'});
+	                	alert('Su denuncia fue enviada con exito.');	                	
+	                },
+	                error: function (xhr, textStatus, errorThrown) {
+	                	alert('Error al enviar la reununcia. Inténtelo nuevamente más tarde.');
+	                }
+	            });  
+	      	});
+	      	$('#registrar').bind('tap', function(){	
+            	block();
+            	$.mobile.showPageLoadingMsg();	      		
+	      		$('#formulario-tag').validate({
+	      		    submitHandler: function( form ) {
+	    	      		$.ajax({
+	    	                type: 'POST',
+	    	                url: SERVER + 'authorize/',
+	    	                contentType: 'application/json; charset=utf-8',
+	    	                data: {uuid:window.device.uuid},
+	    	                success: function(json) {
+	    	                	response = json;   
+	    	                	if(response.code == 200){
+		    	    	      		window.localStorage.setItem('uuid', window.device.uuid);
+		    	    	      		window.localStorage.setItem('nombre', $('#nombre').val());
+		    	    	      		window.localStorage.setItem('apellido', $('#apellido').val());
+		    	    	      		window.localStorage.setItem('email', $('#email').val());
+		    	    	      		window.localStorage.setItem('domicilio', $('#domicilio').val());
+		    	    	      		window.localStorage.setItem('dni', $('#dni').val());
+		    	    	      		window.localStorage.setItem('key', response.api_key);
+		    	    	      		
+		    	    	            $.mobile.changePage('#multa', {transition:'none'});
+	    	                	}
+	    	                	unblock();
+	    	                	$.mobile.hidePageLoadingMsg();
+	    	                	
+	    	    	            alert(response.msg);
+	    	                	
+	    	                },
+	    	                error: function (xhr, textStatus, errorThrown) {
+	    	                	alert('Error al registrarse. Inténtelo nuevamente más tarde.');
+	    	                }
+	    	        	});
+	      			}
+	      		});
+	      	});
+            $('#home').live('pageshow',function(event){
+            	$('#home-content').height($(window).height() - $('#header-home').height() - $('#footer-home').height());
+            	btnInner = $('#home .ui-btn-inner');
+            	btnInner.vAlign();
+            	btnInner.hAlign();
+                
+            	btnGreen = $('#home .green-btn');
+            	btnGreen.vAlign();
+            	btnGreen.hAlign();
+                var margin = btnGreen.css('margin-top');
+                var headerHeight = $('.baimagen').height();
+                btnGreen.css({'margin-top':(parseInt(margin) + headerHeight)+'px'});
+            });
+            var onDeviceReady = function(){
+                pictureSource=navigator.camera.PictureSourceType;
+                destinationType=navigator.camera.DestinationType;            	
+    			navigator.geolocation.getCurrentPosition(onSuccess, onPositionError, { maximumAge: 3000, enableHighAccuracy: true });
+    			uuid = device.uuid;
+            };
+            var block = function(){
+              	$(document.body).bind('tap', function(e){
+              		e.preventDefault();
+              		e.stopPropagation();
+              	});            	
+            };
+            var unblock = function(){
+              	$(document.body).unbind();             	
+            };  
+        	var onTakePicture = function(imageData){
+	            var image = document.getElementById('foto');
+	            image.src = 'data:image/jpeg;base64,' + imageData;	
+	            image.style.display = 'block';
+	            image.width = 1024;
+	            image.height = 768;
+	            image.style.position = 'absolute';
+	            resize('foto',window.innerHeight - $('#enviar-foto').height(), window.innerHeight);
+	            imgData = imageData; 
+        	};       
+        	var resize = function(id, maxh, maxw) {
+      		  var img = document.getElementById(id);
+      		  var ratio = maxh/maxw;
+      		  if (img.height/img.width > ratio){
+      		    if (img.height > maxh){
+      		      img.width = Math.round(img.width*(maxh/img.height));
+      		      img.style.left = Math.round((window.innerWidth - img.width)/2) + 'px';
+      		      img.height = maxh;
+      		    }
+      		  } else {
+      		    if (img.width > maxh){
+      		      img.height = Math.round(img.height*(maxw/img.width));
+      		      img.style.top = Math.round((window.innerHeight - img.height)/2) + 'px';
+      		      img.width = maxw;
+      		    }
+      		  } 
+	      	};       	
+	      	var onFailPicture = function(message){
+	      		$.mobile.changePage('#home', {transition:'none'});
+	      	};  
+			var onSuccess = function(position) {
+				
+			    currentLat =  position.coords.latitude;
+				currentLong =  position.coords.longitude;
+
+				setStations();
+				
+				$.mobile.hidePageLoadingMsg();
+				unblock();
+				geocoder(currentLong, currentLat, function(data){
+					currentLocation = new usig.Punto(orig.puerta_x, orig.puerta_y);
+				}); 
+				markerLocation = new google.maps.Marker({
+				    position: new google.maps.LatLng(currentLat,currentLong),
+				    title:"Ud. está aquí"
+				});		
+				windowLocationInfo = new google.maps.InfoWindow({
+				    content: "<center><strong>Ud. está aquí</strong></center>"
+				});						
+			};
+			var geocoder = function(x,y, callback){
+				var c = callback;
+				$.get('http://ws.usig.buenosaires.gob.ar/geocoder/2.2/reversegeocoding?x='+x+'&y='+y, function(data){
+					data = String(data).replace('(','');
+					data = String(data).replace(')','');
+					orig = JSON.parse(data);							
+					if(typeof(c) == typeof(Function)){
+						c(orig);
+					}
+				});				
+			};
+			var setStations = function(){				
+				var cerca = 9999999;
+				var estacionCercana = "ninguna";
+				$.ajax({
+					  url: SERVER+'estaciones.json',
+					  dataType: 'json',
+					  async: false,
+					  success: function(data) {
+						  	for (estacion in data.estaciones){
+								dis = getDistance(data.estaciones[estacion].lat, data.estaciones[estacion].lon, currentLat, currentLong);
+								data.estaciones[estacion].distance = dis;
+								if(dis < cerca){
+									if(parseInt(data.estaciones[estacion].avaliable) > 0){
+										estacionCercana = data.estaciones[estacion].nombre;
+										cerca = dis;						
+									}
+								}
+							}
+							data.estaciones.sort(function(a, b) {return a.distance - b.distance});
+							estaciones = data.estaciones;
+							for (estacion in data.estaciones){
+								var disponibles = parseInt(data.estaciones[estacion].avaliable);
+								
+								var disponibleStyle = '';
+								if(disponibles < LOW){
+									disponibleStyle = 'red-alert';
+								}else if(disponibles>LOW && disponibles<MEDIUM){
+									disponibleStyle = 'yellow-alert';
+								}else if(disponibles>MEDIUM){
+									disponibleStyle = 'green-alert';
+								}
+								if(!isNaN(disponibles))
+									$('#estaciones').append('<li class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c"><a href="javascript:void(0);" class="estacion">'+data.estaciones[estacion].nombre+' &nbsp;<em>'+Math.floor(data.estaciones[estacion].distance * 10)+' cuadras</em><span class="ui-li-count ui-btn-up-c ui-btn-corner-all '+(disponibleStyle)+'">'+(disponibles)+'</span></a></li>');
+							}					
+							$('#cercana').html('Cerca tuyo: '+estacionCercana);
+							$('#estaciones').delegate('li', 'tap', function () {
+								block();
+								$.mobile.showPageLoadingMsg();
+								var index = $(this).index();
+							    $('#recorridos #recorrido').remove();
+							    $('#recorridos').append('<ul data-theme="g" id="recorrido"></ul>');
+							    getDest(estaciones[index].lon,estaciones[index].lat);
+							});
+					  }
+				});	
+			};
+			var getDistance = function(lat1, lon1, lat2, lon2) {
+			    var R = 3958.7558657440545; 
+			    var dLat = toRad(lat2-lat1);
+			    var dLon = toRad(lon2-lon1); 
+			    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+			            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+			            Math.sin(dLon/2) * Math.sin(dLon/2); 
+			    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+			    var d = R * c;
+			    return d;
+			};			
+			var toRad = function(Value) {
+			    return Value * Math.PI / 180;
+			};			
+			var getDest = function(x,y){
+				geocoder(x, y, function(dest){
+            		currentDest = new usig.Punto(dest.puerta_x, dest.puerta_y);            		
+            		getRecorrido();				
+				});						
+			};			
+			var getRecorrido = function(){
+				usig.Recorridos.init({tipo:'pie'})
+				var passed = false;
+				usig.Recorridos.buscarRecorridos(currentLocation, currentDest, function(opciones) {
+        			recorridos = opciones;
+       				if(!passed){
+	       				passed = true;
+	        			recorridos[0].getDetalle(function(detalle){       					
+	       					for(var j=0, l = detalle.length; j<l;j++){
+	           					$('#recorrido').append('<li data-icon="false" class="ui-btn ui-li ui-btn-up-c"><a href="#" style="white-space:normal; font-size: small">'+detalle[j].text+'</a></li>');
+	   						}        					
+	       					$.mobile.changePage('#recorridos', { transition: 'none'} );      					    
+	       					unblock();
+	       				});
+       				}
+					$.mobile.hidePageLoadingMsg();
+				});  				
+			};
+			$('#infolist').delegate('li', 'tap', function () {        		
+				if(!mapa) initMap();	
+        		clearOverlays();
+				var bicicleterias = new google.maps.KmlLayer('https://maps.google.com/maps/ms?ie=UTF8&authuser=0&msa=0&output=kml&msid=215890358074666090574.0004c0a12465e40d37cec',{preserveViewport:true});
+				overlays.push(bicicleterias);
+				bicicleterias.setMap(mapa);    
+				markerLocation.setMap(mapa);
+				$.mobile.changePage('#page-mapa', {transition:'none'})				
+			});
+			var initMap = function (){
+       	        var myOptions = {
+      		          center: new google.maps.LatLng(-34.603824,-58.383751),
+      		          zoom: 10,
+      		          mapTypeId: google.maps.MapTypeId.ROADMAP
+      		        };
+      		    mapa = new google.maps.Map(document.getElementById('mapa'), myOptions);				
+			}
+			var getCiclovia = function(){
+			    $('#recorridos #recorrido').remove();
+			    $('#recorridos').append('<ul data-theme="g" id="recorrido"></ul>');				
+				$.mobile.showPageLoadingMsg();
+				block();
+				
+				usig.Recorridos.init({tipo:'auto'});
+				usig.Recorridos.cicloviasCercanas(currentLocation, function(data){
+					for(var j=0, l = data.ciclovias.length; j<l;j++){
+       					$('#recorrido').append('<li data-icon="false" class="ui-btn ui-li ui-btn-up-c"><a href="#" style="white-space:normal; font-size: small">'+data.ciclovias[j].nombre+' | Tipo: '+data.ciclovias[j].tipo+'</a></li>');
+					}        					
+   					$.mobile.changePage('#recorridos', { transition: 'none'} );      					    
+   					unblock();
+   					$.mobile.hidePageLoadingMsg();
+				})
+			};
+			var onPositionError = function(e) {
+				alert("No se pudo establecer tu posicion. Para que la aplicación funcione correctamente debes tener habilitada la geolocalización en tu celular.");
+			};	
+			var clearOverlays = function(){
+				for(i=0,l=overlays.length;i<l;i++){
+					if(overlays[i])
+						overlays[i].setMap(null);
+				}
+			}
+			
+            $(function() {
+                document.addEventListener('deviceready', onDeviceReady, true);
+            	
+                $.mobile.showPageLoadingMsg();
+                block();
+            });             
+        </script>
+    </body>
+</html>
